@@ -113,23 +113,17 @@ static int cbuf_instance_check(struct cbuf const* cbuf)
 
 static void cbuf_advance(struct cbuf* cbuf)
 {
-    if (NULL != cbuf)
+    if (cbuf->full)
     {
-        if (cbuf->full)
-        {
-            cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
-        }
-
-        cbuf->write = (cbuf->write == cbuf->cap - 1) ? 0 : cbuf->write + 1;
-        cbuf->full  = (cbuf->write == cbuf->read);
+        cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
     }
+
+    cbuf->write = (cbuf->write == cbuf->cap - 1) ? 0 : cbuf->write + 1;
+    cbuf->full  = (cbuf->write == cbuf->read);
 }
 
 static void cbuf_retreat(struct cbuf* cbuf)
 {
-    if (NULL != cbuf)
-    {
-        cbuf->full = false;
-        cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
-    }
+    cbuf->full = false;
+    cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
 }
