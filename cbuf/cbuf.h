@@ -35,7 +35,9 @@ struct cbuf
     int read;
     int write;
 
-    int  cap;
+    int cap;
+    int size;
+
     bool full;
 };
 
