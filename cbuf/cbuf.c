@@ -9,7 +9,7 @@
 /*  PRIVATE FUNCTION INTERFACES                                              */
 /*****************************************************************************/
 
-static int  cbuf_instance_check (struct cbuf* cbuf);
+static int  cbuf_instance_check (struct cbuf const* cbuf);
 static void cbuf_advance        (struct cbuf* cbuf);
 static void cbuf_retreat        (struct cbuf* cbuf);
 
@@ -40,7 +40,7 @@ void cbuf_flush(struct cbuf* cbuf)
     }
 }
 
-bool cbuf_empty(struct cbuf* cbuf)
+bool cbuf_empty(struct cbuf const* cbuf)
 {
     bool empty;
 
@@ -52,7 +52,7 @@ bool cbuf_empty(struct cbuf* cbuf)
     return empty;
 }
 
-int cbuf_put(struct cbuf* cbuf, void* data)
+int cbuf_put(struct cbuf* cbuf, void const* data)
 {
     int result = cbuf_instance_check(cbuf);
 
@@ -83,7 +83,7 @@ void* cbuf_get(struct cbuf* cbuf)
 /*  PRIVATE FUNCTIONS                                                        */
 /*****************************************************************************/
 
-static int cbuf_instance_check(struct cbuf* cbuf)
+static int cbuf_instance_check(struct cbuf const* cbuf)
 {
     int result;
 
