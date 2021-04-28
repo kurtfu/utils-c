@@ -41,18 +41,6 @@ void cbuf_flush(struct cbuf* cbuf)
     }
 }
 
-bool cbuf_empty(struct cbuf const* cbuf)
-{
-    bool empty;
-
-    if (NULL != cbuf)
-    {
-        empty = (false == cbuf->full && (cbuf->write == cbuf->read));
-    }
-
-    return empty;
-}
-
 int cbuf_put(struct cbuf* cbuf, void const* data)
 {
     int result = cbuf_instance_check(cbuf);

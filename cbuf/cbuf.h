@@ -47,7 +47,6 @@ struct cbuf
 
 int   cbuf_init  (struct cbuf* cbuf);
 void  cbuf_flush (struct cbuf* cbuf);
-bool  cbuf_empty (struct cbuf const* cbuf);
 int   cbuf_put   (struct cbuf* cbuf, void const* data);
 void* cbuf_get   (struct cbuf* cbuf);
 
