@@ -14,6 +14,7 @@ struct hook
     void (*event)(void* args);
     void* args;
 
+    struct hook* prev;
     struct hook* next;
 };
 
@@ -24,6 +25,7 @@ struct hook
 int hook_attach(struct subject* subject, void (*hook)(void* args), void* args)
 {
     int result = HOOK_OK;
+    struct hook* node = NULL;
 
     if (NULL == subject || NULL == hook)
     {
@@ -32,20 +34,28 @@ int hook_attach(struct subject* subject, void (*hook)(void* args), void* args)
 
     if (HOOK_OK == result)
     {
-        struct hook* node = malloc(sizeof(struct hook));
+        node = malloc(sizeof(struct hook));
 
         if (NULL == node)
         {
             result = HOOK_ATTACH_FAILED;
         }
-        else
-        {
-            node->event = hook;
-            node->args  = args;
+    }
 
-            node->next    = subject->list;
-            subject->list = node;
+    if (HOOK_OK == result)
+    {
+        node->event = hook;
+        node->args  = args;
+
+        node->prev = NULL;
+        node->next = subject->list;
+
+        if (NULL != subject->list)
+        {
+            subject->list->prev = node;
         }
+
+        subject->list = node;
     }
 
     return result;
@@ -63,11 +73,9 @@ int hook_detach(struct subject* subject, void (*hook)(void* args))
     if (HOOK_OK == result)
     {
         struct hook* node = subject->list;
-        struct hook* prev = subject->list;
 
         while (NULL != node && node->event != hook)
         {
-            prev = node;
             node = node->next;
         }
 
@@ -76,10 +84,12 @@ int hook_detach(struct subject* subject, void (*hook)(void* args))
             if (node == subject->list)
             {
                 subject->list = node->next;
+                subject->list->prev = NULL;
             }
             else
             {
-                prev->next = node->next;
+                node->prev->next = node->next;
+                node->next->prev = node->prev;
             }
 
             free(node);
