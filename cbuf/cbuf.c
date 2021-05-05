@@ -80,13 +80,9 @@ static int cbuf_instance_check(struct cbuf const* cbuf)
     {
         result = CBUF_NULL_PTR;
     }
-    else if (NULL == cbuf->put)
+    else if (NULL == cbuf->put || NULL == cbuf->get)
     {
-        result = CBUF_INVALID_PUT;
-    }
-    else if (NULL == cbuf->get)
-    {
-        result = CBUF_INVALID_GET;
+        result = CBUF_INVALID_CONFIG;
     }
     else if (cbuf->cap <= 0)
     {
