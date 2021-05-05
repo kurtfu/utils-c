@@ -50,18 +50,15 @@ int dll_push(struct dll* dll, void const* data)
     {
         dll->mov(node, data);
 
+        *dll->prev(node) = dll->head;
+        *dll->next(node) = NULL;
+
         if (NULL == dll->head)
         {
-            *dll->prev(node) = NULL;
-            *dll->next(node) = NULL;
-
             dll->tail = node;
         }
         else
         {
-            *dll->prev(node) = dll->head;
-            *dll->next(node) = NULL;
-
             *dll->next(dll->head) = node;
         }
 
@@ -117,18 +114,15 @@ int dll_insert(struct dll* dll, void const* data)
     {
         dll->mov(node, data);
 
+        *dll->prev(node) = NULL;
+        *dll->next(node) = dll->tail;
+
         if (NULL == dll->tail)
         {
-            *dll->prev(node) = NULL;
-            *dll->next(node) = NULL;
-
             dll->head = node;
         }
         else
         {
-            *dll->prev(node) = NULL;
-            *dll->next(node) = dll->tail;
-
             *dll->prev(dll->tail) = node;
         }
 
