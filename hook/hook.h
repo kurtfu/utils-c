@@ -13,9 +13,6 @@ extern "C" {
 #define HOOK_NULL_PTR       -1
 #define HOOK_ATTACH_FAILED  -2
 
-#define HOOK_OP_END  0
-#define HOOK_OP_RUN  1
-
 /*****************************************************************************/
 /*  DATA TYPES                                                               */
 /*****************************************************************************/
@@ -29,8 +26,8 @@ struct subject
 /*  PUBLIC FUNCTIONS                                                         */
 /*****************************************************************************/
 
-int hook_attach(struct subject* subject, int (*hook)(void* args), void* args);
-int hook_detach(struct subject* subject, int (*hook)(void* args));
+int hook_attach(struct subject* subject, void (*hook)(void* args), void* args);
+int hook_detach(struct subject* subject, void (*hook)(void* args));
 int hook_notify(struct subject* subject);
 
 #ifdef __cplusplus

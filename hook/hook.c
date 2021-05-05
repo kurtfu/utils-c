@@ -11,7 +11,7 @@
 
 struct hook
 {
-    int (*event)(void* args);
+    void (*event)(void* args);
     void* args;
 
     struct hook* next;
@@ -21,7 +21,7 @@ struct hook
 /*  PUBLIC FUNCTIONS                                                         */
 /*****************************************************************************/
 
-int hook_attach(struct subject* subject, int (*hook)(void* args), void* args)
+int hook_attach(struct subject* subject, void (*hook)(void* args), void* args)
 {
     int result = HOOK_OK;
 
@@ -51,7 +51,7 @@ int hook_attach(struct subject* subject, int (*hook)(void* args), void* args)
     return result;
 }
 
-int hook_detach(struct subject* subject, int (*hook)(void* args))
+int hook_detach(struct subject* subject, void (*hook)(void* args))
 {
     int result = HOOK_OK;
 
@@ -104,19 +104,8 @@ int hook_notify(struct subject* subject)
 
         while (NULL != node)
         {
-            int op = node->event(node->args);
-
-            if (HOOK_OP_END != op)
-            {
-                node = node->next;
-            }
-            else
-            {
-                struct hook* next = node->next;
-
-                hook_detach(subject, node->event);
-                node = next;
-            }
+            node->event(node->args);
+            node = node->next;
         }
     }
 
