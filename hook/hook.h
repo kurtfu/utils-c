@@ -9,9 +9,9 @@ extern "C" {
 /*  MACRO DEFINITIONS                                                        */
 /*****************************************************************************/
 
-#define HOOK_OK              0
-#define HOOK_NULL_PTR       -1
-#define HOOK_ATTACH_FAILED  -2
+#define HOOK_OK             0
+#define HOOK_NULL_PTR      -1
+#define HOOK_INVALID_HOOK  -2
 
 /*****************************************************************************/
 /*  DATA TYPES                                                               */
@@ -26,9 +26,9 @@ struct subject
 /*  PUBLIC FUNCTIONS                                                         */
 /*****************************************************************************/
 
-int hook_attach(struct subject* subject, void (*hook)(void* args), void* args);
-int hook_detach(struct subject* subject, void (*hook)(void* args));
-int hook_notify(struct subject* subject);
+int hook_attach(struct subject* subj, void (*event)(void* args), void* args);
+int hook_detach(struct subject* subj, void (*event)(void* args));
+int hook_notify(struct subject* subj);
 
 #ifdef __cplusplus
 }

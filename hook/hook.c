@@ -22,100 +22,100 @@ struct hook
 /*  PUBLIC FUNCTIONS                                                         */
 /*****************************************************************************/
 
-int hook_attach(struct subject* subject, void (*hook)(void* args), void* args)
+int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 {
     int result = HOOK_OK;
-    struct hook* node = NULL;
+    struct hook* hook = NULL;
 
-    if (NULL == subject || NULL == hook)
+    if (NULL == subj || NULL == event)
     {
         result = HOOK_NULL_PTR;
     }
 
     if (HOOK_OK == result)
     {
-        node = malloc(sizeof(struct hook));
+        hook = malloc(sizeof(struct hook));
 
-        if (NULL == node)
+        if (NULL == hook)
         {
-            result = HOOK_ATTACH_FAILED;
+            result = HOOK_INVALID_HOOK;
         }
     }
 
     if (HOOK_OK == result)
     {
-        node->event = hook;
-        node->args  = args;
+        hook->event = event;
+        hook->args  = args;
 
-        node->prev = NULL;
-        node->next = subject->list;
+        hook->prev = NULL;
+        hook->next = subj->list;
 
-        if (NULL != subject->list)
+        if (NULL != subj->list)
         {
-            subject->list->prev = node;
+            subj->list->prev = hook;
         }
 
-        subject->list = node;
+        subj->list = hook;
     }
 
     return result;
 }
 
-int hook_detach(struct subject* subject, void (*hook)(void* args))
+int hook_detach(struct subject* subj, void (*event)(void* args))
 {
     int result = HOOK_OK;
 
-    if (NULL == subject || NULL == hook)
+    if (NULL == subj || NULL == event)
     {
         result = HOOK_NULL_PTR;
     }
 
     if (HOOK_OK == result)
     {
-        struct hook* node = subject->list;
+        struct hook* hook = subj->list;
 
-        while (NULL != node && node->event != hook)
+        while (NULL != hook && hook->event != event)
         {
-            node = node->next;
+            hook = hook->next;
         }
 
-        if (NULL != node)
+        if (NULL != hook)
         {
-            if (node == subject->list)
+            if (hook == subj->list)
             {
-                subject->list = node->next;
-                subject->list->prev = NULL;
+                subj->list = hook->next;
+                subj->list->prev = NULL;
             }
             else
             {
-                node->prev->next = node->next;
-                node->next->prev = node->prev;
+                hook->prev->next = hook->next;
+                hook->next->prev = hook->prev;
             }
 
-            free(node);
+            free(hook);
         }
     }
 
     return result;
 }
 
-int hook_notify(struct subject* subject)
+int hook_notify(struct subject* subj)
 {
     int result = HOOK_OK;
 
-    if (NULL == subject)
+    if (NULL == subj)
     {
         result = HOOK_NULL_PTR;
     }
 
     if (HOOK_OK == result)
     {
-        struct hook* node = subject->list;
+        struct hook* hook = subj->list;
 
-        while (NULL != node)
+        while (NULL != hook)
         {
-            node->event(node->args);
-            node = node->next;
+            hook->event(hook->args);
+            hook = hook->next;
         }
     }
 
