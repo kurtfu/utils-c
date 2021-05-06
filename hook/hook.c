@@ -3,38 +3,43 @@
 /*****************************************************************************/
 
 #include "hook.h"
-#include <stdlib.h>
+#include <stddef.h>
 
 /*****************************************************************************/
-/*  DATA TYPES                                                               */
+/*  PRIVATE FUNCTION INTERFACES                                              */
 /*****************************************************************************/
 
-struct hook
-{
-    void (*event)(void* args);
-    void* args;
-
-    struct hook* prev;
-    struct hook* next;
-};
+static int hook_instance_check(struct subject* subj);
 
 /*****************************************************************************/
 /*  PUBLIC FUNCTIONS                                                         */
 /*****************************************************************************/
 
+int hook_init(struct subject* subj)
+{
+    int result = hook_instance_check(subj);
+
+    if (HOOK_OK == result)
+    {
+        subj->list = NULL;
+    }
+
+    return result;
+}
+
 int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 {
-    int result = HOOK_OK;
+    int result = hook_instance_check(subj);
     struct hook* hook = NULL;
 
-    if (NULL == subj || NULL == event)
+    if (NULL == event)
     {
         result = HOOK_NULL_PTR;
     }
 
     if (HOOK_OK == result)
     {
-        hook = malloc(sizeof(struct hook));
+        hook = subj->hook();
 
         if (NULL == hook)
         {
@@ -63,10 +68,10 @@ int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 
 int hook_detach(struct subject* subj, void (*event)(void* args))
 {
-    int result = HOOK_OK;
+    int result = hook_instance_check(subj);
     struct hook* hook = NULL;
 
-    if (NULL == subj || NULL == event)
+    if (NULL == event)
     {
         result = HOOK_NULL_PTR;
     }
@@ -99,7 +104,7 @@ int hook_detach(struct subject* subj, void (*event)(void* args))
             hook->next->prev = hook->prev;
         }
 
-        free(hook);
+        subj->free(hook);
     }
 
     return result;
@@ -107,12 +112,7 @@ int hook_detach(struct subject* subj, void (*event)(void* args))
 
 int hook_notify(struct subject* subj)
 {
-    int result = HOOK_OK;
-
-    if (NULL == subj)
-    {
-        result = HOOK_NULL_PTR;
-    }
+    int result = hook_instance_check(subj);
 
     if (HOOK_OK == result)
     {
@@ -123,6 +123,30 @@ int hook_notify(struct subject* subj)
             hook->event(hook->args);
             hook = hook->next;
         }
+    }
+
+    return result;
+}
+
+/*****************************************************************************/
+/*  PRIVATE FUNCTIONS                                                        */
+/*****************************************************************************/
+
+static int hook_instance_check(struct subject* subj)
+{
+    int result;
+
+    if (NULL == subj)
+    {
+        result = HOOK_NULL_PTR;
+    }
+    else if (NULL == subj->hook || NULL == subj->free)
+    {
+        result = HOOK_INVALID_CONFIG;
+    }
+    else
+    {
+        result = HOOK_OK;
     }
 
     return result;
