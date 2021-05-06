@@ -64,6 +64,7 @@ int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 int hook_detach(struct subject* subj, void (*event)(void* args))
 {
     int result = HOOK_OK;
+    struct hook* hook = NULL;
 
     if (NULL == subj || NULL == event)
     {
@@ -72,28 +73,33 @@ int hook_detach(struct subject* subj, void (*event)(void* args))
 
     if (HOOK_OK == result)
     {
-        struct hook* hook = subj->list;
+        hook = subj->list;
 
         while (NULL != hook && hook->event != event)
         {
             hook = hook->next;
         }
 
-        if (NULL != hook)
+        if (NULL == hook)
         {
-            if (hook == subj->list)
-            {
-                subj->list = hook->next;
-                subj->list->prev = NULL;
-            }
-            else
-            {
-                hook->prev->next = hook->next;
-                hook->next->prev = hook->prev;
-            }
-
-            free(hook);
+            result = HOOK_INVALID_HOOK;
         }
+    }
+
+    if (HOOK_OK == result)
+    {
+        if (hook == subj->list)
+        {
+            subj->list = hook->next;
+            subj->list->prev = NULL;
+        }
+        else
+        {
+            hook->prev->next = hook->next;
+            hook->next->prev = hook->prev;
+        }
+
+        free(hook);
     }
 
     return result;
