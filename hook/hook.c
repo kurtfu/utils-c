@@ -30,7 +30,6 @@ int hook_init(struct subject* subj)
 int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 {
     int result = hook_instance_check(subj);
-    struct hook* hook = NULL;
 
     if (NULL == event)
     {
@@ -39,28 +38,21 @@ int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 
     if (HOOK_OK == result)
     {
-        hook = subj->hook();
+        struct hook* hook = subj->hook();
 
         if (NULL == hook)
         {
             result = HOOK_INVALID_HOOK;
         }
-    }
 
-    if (HOOK_OK == result)
-    {
-        hook->event = event;
-        hook->args  = args;
-
-        hook->prev = NULL;
-        hook->next = subj->list;
-
-        if (NULL != subj->list)
+        if (HOOK_OK == result)
         {
-            subj->list->prev = hook;
-        }
+            hook->event = event;
+            hook->args  = args;
 
-        subj->list = hook;
+            hook->next = subj->list;
+            subj->list = hook;
+        }
     }
 
     return result;
@@ -69,7 +61,6 @@ int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 int hook_detach(struct subject* subj, void (*event)(void* args))
 {
     int result = hook_instance_check(subj);
-    struct hook* hook = NULL;
 
     if (NULL == event)
     {
@@ -78,10 +69,12 @@ int hook_detach(struct subject* subj, void (*event)(void* args))
 
     if (HOOK_OK == result)
     {
-        hook = subj->list;
+        struct hook* hook = subj->list;
+        struct hook* prev = subj->list;
 
         while (NULL != hook && hook->event != event)
         {
+            prev = hook;
             hook = hook->next;
         }
 
@@ -89,22 +82,17 @@ int hook_detach(struct subject* subj, void (*event)(void* args))
         {
             result = HOOK_INVALID_HOOK;
         }
-    }
 
-    if (HOOK_OK == result)
-    {
-        if (hook == subj->list)
+        if (HOOK_OK == result)
         {
-            subj->list = hook->next;
-            subj->list->prev = NULL;
-        }
-        else
-        {
-            hook->prev->next = hook->next;
-            hook->next->prev = hook->prev;
-        }
+            if (hook == subj->list)
+            {
+                subj->list = hook->next;
+            }
 
-        subj->free(hook);
+            prev->next = hook->next;
+            subj->free(hook);
+        }
     }
 
     return result;

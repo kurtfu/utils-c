@@ -23,7 +23,6 @@ struct hook
     void (*event)(void* args);
     void* args;
 
-    struct hook* prev;
     struct hook* next;
 };
 
