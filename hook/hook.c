@@ -108,8 +108,10 @@ int hook_notify(struct subject* subj)
 
         while (NULL != hook)
         {
+            struct hook* next = hook->next;
+
             hook->event(hook->args);
-            hook = hook->next;
+            hook = next;
         }
     }
 
