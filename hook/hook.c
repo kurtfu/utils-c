@@ -42,7 +42,7 @@ int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 {
     int result = hook_instance_check(subj);
 
-    if (NULL == event)
+    if (HOOK_OK == result && NULL == event)
     {
         result = HOOK_NULL_PTR;
     }
@@ -73,7 +73,7 @@ int hook_detach(struct subject* subj, void (*event)(void* args))
 {
     int result = hook_instance_check(subj);
 
-    if (NULL == event)
+    if (HOOK_OK == result && NULL == event)
     {
         result = HOOK_NULL_PTR;
     }
