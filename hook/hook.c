@@ -3,7 +3,18 @@
 /*****************************************************************************/
 
 #include "hook.h"
-#include <stddef.h>
+
+/*****************************************************************************/
+/*  DATA TYPES                                                               */
+/*****************************************************************************/
+
+struct hook
+{
+    void (*event)(void* args);
+    void* args;
+
+    struct hook* next;
+};
 
 /*****************************************************************************/
 /*  PRIVATE FUNCTION INTERFACES                                              */
@@ -38,7 +49,7 @@ int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
 
     if (HOOK_OK == result)
     {
-        struct hook* hook = subj->hook();
+        struct hook* hook = subj->alloc(sizeof(struct hook));
 
         if (NULL == hook)
         {
@@ -130,7 +141,7 @@ static int hook_instance_check(struct subject* subj)
     {
         result = HOOK_NULL_PTR;
     }
-    else if (NULL == subj->hook || NULL == subj->free)
+    else if (NULL == subj->alloc || NULL == subj->free)
     {
         result = HOOK_INVALID_CONFIG;
     }
