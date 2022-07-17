@@ -9,9 +9,9 @@
 /*  PRIVATE FUNCTION INTERFACES                                              */
 /*****************************************************************************/
 
-static int  cbuf_instance_check (struct cbuf const* cbuf);
-static void cbuf_advance        (struct cbuf* cbuf);
-static void cbuf_retreat        (struct cbuf* cbuf);
+static int cbuf_instance_check(struct cbuf const* cbuf);
+static void cbuf_advance(struct cbuf* cbuf);
+static void cbuf_retreat(struct cbuf* cbuf);
 
 /*****************************************************************************/
 /*  PUBLIC FUNCTIONS                                                         */
@@ -33,7 +33,7 @@ void cbuf_flush(struct cbuf* cbuf)
 {
     if (NULL != cbuf)
     {
-        cbuf->read  = 0;
+        cbuf->read = 0;
         cbuf->write = 0;
 
         cbuf->size = 0;
@@ -56,8 +56,8 @@ int cbuf_put(struct cbuf* cbuf, void const* data)
 
 void* cbuf_get(struct cbuf* cbuf)
 {
-    void* data   = NULL;
-    int   result = cbuf_instance_check(cbuf);
+    void* data = NULL;
+    int result = cbuf_instance_check(cbuf);
 
     if (CBUF_OK == result && 0 != cbuf->size)
     {
@@ -108,7 +108,7 @@ static void cbuf_advance(struct cbuf* cbuf)
     }
 
     cbuf->write = (cbuf->write == cbuf->cap - 1) ? 0 : cbuf->write + 1;
-    cbuf->full  = (cbuf->write == cbuf->read);
+    cbuf->full = (cbuf->write == cbuf->read);
 }
 
 static void cbuf_retreat(struct cbuf* cbuf)

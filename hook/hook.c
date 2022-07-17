@@ -59,7 +59,7 @@ int hook_attach(struct subject* subj, void (*event)(void* args), void* args)
         if (HOOK_OK == result)
         {
             hook->event = event;
-            hook->args  = args;
+            hook->args = args;
 
             hook->next = subj->list;
             subj->list = hook;

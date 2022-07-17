@@ -9,8 +9,8 @@
 /*  PRIVATE FUNCTION INTERFACES                                              */
 /*****************************************************************************/
 
-static int  dll_instance_check (struct dll const* dll);
-static bool dll_contains       (struct dll const* dll, void const* node);
+static int dll_instance_check(struct dll const* dll);
+static bool dll_contains(struct dll const* dll, void const* node);
 
 /*****************************************************************************/
 /*  PUBLIC FUNCTIONS                                                         */
@@ -33,8 +33,8 @@ int dll_init(struct dll* dll)
 
 int dll_push(struct dll* dll, void const* data)
 {
-    int   result = dll_instance_check(dll);
-    void* node   = NULL;
+    int result = dll_instance_check(dll);
+    void* node = NULL;
 
     if (DLL_OK == result)
     {
@@ -97,8 +97,8 @@ int dll_pop(struct dll* dll)
 
 int dll_insert(struct dll* dll, void const* data)
 {
-    int   result = dll_instance_check(dll);
-    void* node   = NULL;
+    int result = dll_instance_check(dll);
+    void* node = NULL;
 
     if (DLL_OK == result)
     {
@@ -233,8 +233,8 @@ static int dll_instance_check(struct dll const* dll)
 
 static bool dll_contains(struct dll const* dll, void const* node)
 {
-    bool  found = false;
-    void* curr  = dll->tail;
+    bool found = false;
+    void* curr = dll->tail;
 
     while (false == found && NULL != curr)
     {

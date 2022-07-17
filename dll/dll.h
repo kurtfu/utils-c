@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif /* __cplusplus */
 
 /*****************************************************************************/
 /*  HEADER INCLUDES                                                          */
@@ -15,10 +15,10 @@ extern "C" {
 /*  MACRO DEFINITIONS                                                        */
 /*****************************************************************************/
 
-#define DLL_OK               0
-#define DLL_NULL_PTR        -1
-#define DLL_INVALID_CONFIG  -2
-#define DLL_INVALID_NODE    -3
+#define DLL_OK             0
+#define DLL_NULL_PTR       -1
+#define DLL_INVALID_CONFIG -2
+#define DLL_INVALID_NODE   -3
 
 /*****************************************************************************/
 /*  DATA TYPES                                                               */
@@ -44,18 +44,18 @@ struct dll
 /*  PUBLIC FUNCTIONS                                                         */
 /*****************************************************************************/
 
-int dll_init   (struct dll* dll);
+int dll_init(struct dll* dll);
 
-int dll_push   (struct dll* dll, void const* data);
-int dll_pop    (struct dll* dll);
+int dll_push(struct dll* dll, void const* data);
+int dll_pop(struct dll* dll);
 
-int dll_insert (struct dll* dll, void const* data);
-int dll_erase  (struct dll* dll);
+int dll_insert(struct dll* dll, void const* data);
+int dll_erase(struct dll* dll);
 
-int dll_remove (struct dll* dll, void* node);
+int dll_remove(struct dll* dll, void* node);
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif /* __cplusplus */
 
-#endif  /* DLL_H */
+#endif /* DLL_H */
