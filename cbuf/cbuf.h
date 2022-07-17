@@ -6,12 +6,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 /*****************************************************************************/
-/*  HEADER INCLUDES                                                          */
-/*****************************************************************************/
-
-#include <stdbool.h>
-
-/*****************************************************************************/
 /*  MACRO DEFINITIONS                                                        */
 /*****************************************************************************/
 
@@ -36,8 +30,6 @@ struct cbuf
 
     int cap;
     int size;
-
-    bool full;
 };
 
 /*****************************************************************************/
@@ -46,6 +38,7 @@ struct cbuf
 
 int cbuf_init(struct cbuf* cbuf);
 void cbuf_flush(struct cbuf* cbuf);
+
 int cbuf_put(struct cbuf* cbuf, void const* data);
 void* cbuf_get(struct cbuf* cbuf);
 

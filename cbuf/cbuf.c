@@ -37,7 +37,6 @@ void cbuf_flush(struct cbuf* cbuf)
         cbuf->write = 0;
 
         cbuf->size = 0;
-        cbuf->full = false;
     }
 }
 
@@ -98,7 +97,7 @@ static int cbuf_instance_check(struct cbuf const* cbuf)
 
 static void cbuf_advance(struct cbuf* cbuf)
 {
-    if (cbuf->full)
+    if (cbuf->size == cbuf->cap)
     {
         cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
     }
@@ -108,13 +107,10 @@ static void cbuf_advance(struct cbuf* cbuf)
     }
 
     cbuf->write = (cbuf->write == cbuf->cap - 1) ? 0 : cbuf->write + 1;
-    cbuf->full = (cbuf->write == cbuf->read);
 }
 
 static void cbuf_retreat(struct cbuf* cbuf)
 {
     cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
     cbuf->size--;
-
-    cbuf->full = false;
 }
