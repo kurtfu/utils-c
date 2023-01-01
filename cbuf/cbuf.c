@@ -3,114 +3,49 @@
 /*****************************************************************************/
 
 #include "cbuf.h"
-#include <stddef.h>
 
 /*****************************************************************************/
-/*  PRIVATE FUNCTION INTERFACES                                              */
+/*  PUBLIC FUNCTION DEFINITIONS                                              */
 /*****************************************************************************/
 
-static int cbuf_instance_check(struct cbuf const* cbuf);
-static void cbuf_advance(struct cbuf* cbuf);
-static void cbuf_retreat(struct cbuf* cbuf);
+CBUF_DEFINE(cbuf_char)
+CBUF_DEFINE(cbuf_char_ptr)
 
-/*****************************************************************************/
-/*  PUBLIC FUNCTIONS                                                         */
-/*****************************************************************************/
+CBUF_DEFINE(cbuf_signed_char)
+CBUF_DEFINE(cbuf_signed_char_ptr)
 
-int cbuf_init(struct cbuf* cbuf)
-{
-    int result = cbuf_instance_check(cbuf);
+CBUF_DEFINE(cbuf_unsigned_char)
+CBUF_DEFINE(cbuf_unsigned_char_ptr)
 
-    if (CBUF_OK == result)
-    {
-        cbuf_flush(cbuf);
-    }
+CBUF_DEFINE(cbuf_short)
+CBUF_DEFINE(cbuf_short_ptr)
 
-    return result;
-}
+CBUF_DEFINE(cbuf_unsigned_short)
+CBUF_DEFINE(cbuf_unsigned_short_ptr)
 
-void cbuf_flush(struct cbuf* cbuf)
-{
-    if (NULL != cbuf)
-    {
-        cbuf->read = 0;
-        cbuf->write = 0;
+CBUF_DEFINE(cbuf_int)
+CBUF_DEFINE(cbuf_int_ptr)
 
-        cbuf->size = 0;
-    }
-}
+CBUF_DEFINE(cbuf_unsigned_int)
+CBUF_DEFINE(cbuf_unsigned_int_ptr)
 
-int cbuf_put(struct cbuf* cbuf, void const* data)
-{
-    int result = cbuf_instance_check(cbuf);
+CBUF_DEFINE(cbuf_long)
+CBUF_DEFINE(cbuf_long_ptr)
 
-    if (CBUF_OK == result)
-    {
-        cbuf->put(cbuf, data);
-        cbuf_advance(cbuf);
-    }
+CBUF_DEFINE(cbuf_unsigned_long)
+CBUF_DEFINE(cbuf_unsigned_long_ptr)
 
-    return result;
-}
+CBUF_DEFINE(cbuf_long_long)
+CBUF_DEFINE(cbuf_long_long_ptr)
 
-void* cbuf_get(struct cbuf* cbuf)
-{
-    void* data = NULL;
-    int result = cbuf_instance_check(cbuf);
+CBUF_DEFINE(cbuf_unsigned_long_long)
+CBUF_DEFINE(cbuf_unsigned_long_long_ptr)
 
-    if (CBUF_OK == result && 0 != cbuf->size)
-    {
-        data = cbuf->get(cbuf);
-        cbuf_retreat(cbuf);
-    }
+CBUF_DEFINE(cbuf_float)
+CBUF_DEFINE(cbuf_float_ptr)
 
-    return data;
-}
+CBUF_DEFINE(cbuf_double)
+CBUF_DEFINE(cbuf_double_ptr)
 
-/*****************************************************************************/
-/*  PRIVATE FUNCTIONS                                                        */
-/*****************************************************************************/
-
-static int cbuf_instance_check(struct cbuf const* cbuf)
-{
-    int result;
-
-    if (NULL == cbuf)
-    {
-        result = CBUF_NULL_PTR;
-    }
-    else if (NULL == cbuf->put || NULL == cbuf->get)
-    {
-        result = CBUF_INVALID_CONFIG;
-    }
-    else if (cbuf->cap <= 0)
-    {
-        result = CBUF_INVALID_CAPACITY;
-    }
-    else
-    {
-        result = CBUF_OK;
-    }
-
-    return result;
-}
-
-static void cbuf_advance(struct cbuf* cbuf)
-{
-    if (cbuf->size == cbuf->cap)
-    {
-        cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
-    }
-    else
-    {
-        cbuf->size++;
-    }
-
-    cbuf->write = (cbuf->write == cbuf->cap - 1) ? 0 : cbuf->write + 1;
-}
-
-static void cbuf_retreat(struct cbuf* cbuf)
-{
-    cbuf->read = (cbuf->read == cbuf->cap - 1) ? 0 : cbuf->read + 1;
-    cbuf->size--;
-}
+CBUF_DEFINE(cbuf_long_double)
+CBUF_DEFINE(cbuf_long_double_ptr)
