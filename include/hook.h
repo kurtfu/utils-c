@@ -29,7 +29,7 @@ struct subject
     struct hook* list;
 
     void* (*alloc)(size_t size);
-    void (*free)(struct hook* hook);
+    void (*free)(void* hook);
 };
 
 /*****************************************************************************/
