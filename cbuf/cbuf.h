@@ -22,48 +22,6 @@ enum
     CBUF_INVALID_CAPACITY = -3
 };
 
-typedef char cbuf_char;
-typedef char* cbuf_char_ptr;
-
-typedef signed char cbuf_signed_char;
-typedef signed char* cbuf_signed_char_ptr;
-
-typedef unsigned char cbuf_unsigned_char;
-typedef unsigned char* cbuf_unsigned_char_ptr;
-
-typedef short cbuf_short;
-typedef short* cbuf_short_ptr;
-
-typedef unsigned short cbuf_unsigned_short;
-typedef unsigned short* cbuf_unsigned_short_ptr;
-
-typedef int cbuf_int;
-typedef int* cbuf_int_ptr;
-
-typedef unsigned int cbuf_unsigned_int;
-typedef unsigned int* cbuf_unsigned_int_ptr;
-
-typedef long cbuf_long;
-typedef long* cbuf_long_ptr;
-
-typedef unsigned long cbuf_unsigned_long;
-typedef unsigned long* cbuf_unsigned_long_ptr;
-
-typedef long long cbuf_long_long;
-typedef long long* cbuf_long_long_ptr;
-
-typedef unsigned int cbuf_unsigned_long_long;
-typedef unsigned int* cbuf_unsigned_long_long_ptr;
-
-typedef float cbuf_float;
-typedef float* cbuf_float_ptr;
-
-typedef double cbuf_double;
-typedef double* cbuf_double_ptr;
-
-typedef long double cbuf_long_double;
-typedef long double* cbuf_long_double_ptr;
-
 /*****************************************************************************/
 /*  MACRO DEFINITIONS                                                        */
 /*****************************************************************************/
@@ -179,52 +137,6 @@ typedef long double* cbuf_long_double_ptr;
 #define cbuf_push(T, self, data) cbuf_push_##T(self, data)
 #define cbuf_pop(T, self)        cbuf_pop_##T(self)
 #define cbuf_clear(T, self)      cbuf_clear_##T(self)
-
-/*****************************************************************************/
-/*  PUBLIC FUNCTION DECLARATIONS                                             */
-/*****************************************************************************/
-
-CBUF_DECLARE(cbuf_char)
-CBUF_DECLARE(cbuf_char_ptr)
-
-CBUF_DECLARE(cbuf_signed_char)
-CBUF_DECLARE(cbuf_signed_char_ptr)
-
-CBUF_DECLARE(cbuf_unsigned_char)
-CBUF_DECLARE(cbuf_unsigned_char_ptr)
-
-CBUF_DECLARE(cbuf_short)
-CBUF_DECLARE(cbuf_short_ptr)
-
-CBUF_DECLARE(cbuf_unsigned_short)
-CBUF_DECLARE(cbuf_unsigned_short_ptr)
-
-CBUF_DECLARE(cbuf_int)
-CBUF_DECLARE(cbuf_int_ptr)
-
-CBUF_DECLARE(cbuf_unsigned_int)
-CBUF_DECLARE(cbuf_unsigned_int_ptr)
-
-CBUF_DECLARE(cbuf_long)
-CBUF_DECLARE(cbuf_long_ptr)
-
-CBUF_DECLARE(cbuf_unsigned_long)
-CBUF_DECLARE(cbuf_unsigned_long_ptr)
-
-CBUF_DECLARE(cbuf_long_long)
-CBUF_DECLARE(cbuf_long_long_ptr)
-
-CBUF_DECLARE(cbuf_unsigned_long_long)
-CBUF_DECLARE(cbuf_unsigned_long_long_ptr)
-
-CBUF_DECLARE(cbuf_float)
-CBUF_DECLARE(cbuf_float_ptr)
-
-CBUF_DECLARE(cbuf_double)
-CBUF_DECLARE(cbuf_double_ptr)
-
-CBUF_DECLARE(cbuf_long_double)
-CBUF_DECLARE(cbuf_long_double_ptr)
 
 #ifdef __cplusplus
 }
