@@ -17,7 +17,7 @@ extern "C" {
 
 #define CBUF_OK               (0)
 #define CBUF_NULL_PTR         (-1)
-#define CBUF_INVALID_CAPACITY (-3)
+#define CBUF_INVALID_CAPACITY (-2)
 
 #define CBUF_DECLARE(T)                               \
     struct cbuf_##T                                   \
