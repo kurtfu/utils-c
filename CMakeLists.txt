@@ -38,6 +38,11 @@ add_executable(utils-hook
     src/hook.c
 )
 
+add_executable(utils-dummy EXCLUDE_FROM_ALL
+    dummy/cbuf.c
+    dummy/dll.c
+)
+
 add_executable(utils-test
     test/main.cpp
 
