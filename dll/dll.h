@@ -10,49 +10,137 @@ extern "C" {
 /*****************************************************************************/
 
 #include <stdbool.h>
-
-/*****************************************************************************/
-/*  MACRO DEFINITIONS                                                        */
-/*****************************************************************************/
-
-#define DLL_OK             0
-#define DLL_NULL_PTR       -1
-#define DLL_INVALID_CONFIG -2
-#define DLL_INVALID_NODE   -3
+#include <stddef.h>
 
 /*****************************************************************************/
 /*  DATA TYPES                                                               */
 /*****************************************************************************/
 
-struct dll
+enum
 {
-    void* head;
-    void* tail;
-
-    void* (*node)(void);
-
-    void (*mov)(void* node, void const* data);
-    void (*del)(void* node);
-
-    void** (*prev)(void const* node);
-    void** (*next)(void const* node);
-
-    int size;
+    DLL_OK = 0,
+    DLL_NULL_PTR = -1,
+    DLL_INVALID_CONFIG = -2,
+    DLL_BAD_ALLOCATION = -3
 };
 
 /*****************************************************************************/
-/*  PUBLIC FUNCTIONS                                                         */
+/*  MACRO DEFINITIONS                                                        */
 /*****************************************************************************/
 
-int dll_init(struct dll* dll);
+#define DLL_DECLARE(T)                                  \
+    struct dll_node_##T                                 \
+    {                                                   \
+        T data;                                         \
+                                                        \
+        struct dll_node_##T* prev;                      \
+        struct dll_node_##T* next;                      \
+    };                                                  \
+                                                        \
+    struct dll_##T                                      \
+    {                                                   \
+        struct dll_node_##T* head;                      \
+        struct dll_node_##T* tail;                      \
+                                                        \
+        void* (*allocator)(size_t);                     \
+        void (*deleter)(void*);                         \
+                                                        \
+        size_t size;                                    \
+    };                                                  \
+                                                        \
+    int dll_push_back_##T(struct dll_##T* dll, T data); \
+    int dll_pop_back_##T(struct dll_##T* dll);
 
-int dll_push(struct dll* dll, void const* data);
-int dll_pop(struct dll* dll);
+#define DLL_DEFINE(T)                                              \
+    static int dll_validate_##T(struct dll_##T* self)              \
+    {                                                              \
+        int result = DLL_OK;                                       \
+                                                                   \
+        if (NULL == self)                                          \
+        {                                                          \
+            result = DLL_NULL_PTR;                                 \
+        }                                                          \
+        else if (NULL == self->allocator || NULL == self->deleter) \
+        {                                                          \
+            result = DLL_INVALID_CONFIG;                           \
+        }                                                          \
+                                                                   \
+        return result;                                             \
+    }                                                              \
+                                                                   \
+    int dll_push_back_##T(struct dll_##T* self, T data)            \
+    {                                                              \
+        int result = dll_validate_##T(self);                       \
+        struct dll_node_##T* node = NULL;                          \
+                                                                   \
+        if (DLL_OK == result)                                      \
+        {                                                          \
+            node = self->allocator(sizeof(struct dll_node_##T));   \
+                                                                   \
+            if (NULL == node)                                      \
+            {                                                      \
+                result = DLL_BAD_ALLOCATION;                       \
+            }                                                      \
+        }                                                          \
+                                                                   \
+        if (DLL_OK == result)                                      \
+        {                                                          \
+            node->data = data;                                     \
+                                                                   \
+            node->prev = self->tail;                               \
+            node->next = NULL;                                     \
+                                                                   \
+            if (0 == self->size)                                   \
+            {                                                      \
+                self->head = node;                                 \
+            }                                                      \
+            else                                                   \
+            {                                                      \
+                self->tail->next = node;                           \
+            }                                                      \
+                                                                   \
+            self->tail = node;                                     \
+            self->size++;                                          \
+        }                                                          \
+                                                                   \
+        return result;                                             \
+    }                                                              \
+    int dll_pop_back_##T(struct dll_##T* self)                     \
+    {                                                              \
+        int result = dll_validate_##T(self);                       \
+                                                                   \
+        if (DLL_OK == result && 0 != self->size)                   \
+        {                                                          \
+            self->tail = self->tail->prev;                         \
+                                                                   \
+            if (1 == self->size)                                   \
+            {                                                      \
+                self->deleter(self->head);                         \
+                self->head = self->tail;                           \
+            }                                                      \
+            else                                                   \
+            {                                                      \
+                self->deleter(self->tail->next);                   \
+            }                                                      \
+                                                                   \
+            self->size--;                                          \
+        }                                                          \
+                                                                   \
+        return result;                                             \
+    }
 
-int dll_insert(struct dll* dll, void const* data);
-int dll_erase(struct dll* dll);
+#define DLL_CREATE(T, Allocator, Deleter, name) \
+    struct dll_##T name                         \
+    {                                           \
+        /* .head      = */ NULL,                \
+        /* .tail      = */ NULL,                \
+        /* .allocator = */ (Allocator),         \
+        /* .deleter   = */ (Deleter),           \
+        /* .size      = */ 0                    \
+    }
 
-int dll_remove(struct dll* dll, void* node);
+#define dll_push_back(T, self, data) dll_push_back_##T(self, data)
+#define dll_pop_back(T, self)        dll_pop_back_##T(self)
 
 #ifdef __cplusplus
 }
