@@ -15,10 +15,10 @@ extern "C" {
 /*  MACRO DEFINITIONS                                                        */
 /*****************************************************************************/
 
-#define HOOK_OK             0
-#define HOOK_NULL_PTR       -1
-#define HOOK_INVALID_HOOK   -2
-#define HOOK_INVALID_CONFIG -3
+#define HOOK_OK             (0)
+#define HOOK_NULL_PTR       (-1)
+#define HOOK_INVALID_HOOK   (-2)
+#define HOOK_INVALID_CONFIG (-3)
 
 /*****************************************************************************/
 /*  DATA TYPES                                                               */
