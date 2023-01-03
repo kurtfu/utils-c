@@ -11,6 +11,7 @@
 /*  MODULE VARIABLES                                                         */
 /*****************************************************************************/
 
+/* NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables) */
 struct subject call_counter = {
     .alloc = malloc,
     .free = free,
