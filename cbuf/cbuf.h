@@ -168,8 +168,7 @@ typedef long double* cbuf_long_double_ptr;
     }
 
 #define CBUF_CREATE(T, name, buf, N) \
-    struct cbuf_##T name             \
-    {                                \
+    struct cbuf_##T name = {         \
         /* .buffer   = */ (buf),     \
         /* .read     = */ (buf),     \
         /* .write    = */ (buf),     \

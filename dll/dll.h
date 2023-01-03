@@ -105,6 +105,7 @@ enum
                                                                    \
         return result;                                             \
     }                                                              \
+                                                                   \
     int dll_pop_back_##T(struct dll_##T* self)                     \
     {                                                              \
         int result = dll_validate_##T(self);                       \
@@ -130,13 +131,12 @@ enum
     }
 
 #define DLL_CREATE(T, Allocator, Deleter, name) \
-    struct dll_##T name                         \
-    {                                           \
+    struct dll_##T name = {                     \
         /* .head      = */ NULL,                \
         /* .tail      = */ NULL,                \
         /* .allocator = */ (Allocator),         \
         /* .deleter   = */ (Deleter),           \
-        /* .size      = */ 0                    \
+        /* .size      = */ 0,                   \
     }
 
 #define dll_push_back(T, self, data) dll_push_back_##T(self, data)
