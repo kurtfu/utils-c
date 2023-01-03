@@ -22,14 +22,26 @@ else()
 endif()
 
 include_directories(
-    cbuf
-    dll
+    ${CMAKE_SOURCE_DIR}/include
+)
+
+add_executable(utils-cbuf
+    examples/cbuf.c
+)
+
+add_executable(utils-dll
+    examples/dll.c
+)
+
+add_executable(utils-hook
+    examples/hook.c
+    src/hook.c
 )
 
 add_executable(utils-test
     test/main.cpp
 
-    cbuf/cbuf.c
+    test/cbuf.c
     test/cbuf.cpp
 
     test/dll.c
