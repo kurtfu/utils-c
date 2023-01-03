@@ -13,20 +13,13 @@ extern "C" {
 #include <stddef.h>
 
 /*****************************************************************************/
-/*  DATA TYPES                                                               */
-/*****************************************************************************/
-
-enum
-{
-    DLL_OK = 0,
-    DLL_NULL_PTR = -1,
-    DLL_INVALID_CONFIG = -2,
-    DLL_BAD_ALLOCATION = -3
-};
-
-/*****************************************************************************/
 /*  MACRO DEFINITIONS                                                        */
 /*****************************************************************************/
+
+#define DLL_OK             0
+#define DLL_NULL_PTR       (-1)
+#define DLL_INVALID_CONFIG (-2)
+#define DLL_BAD_ALLOCATION (-3)
 
 #define DLL_DECLARE(T)                                  \
     struct dll_node_##T                                 \
