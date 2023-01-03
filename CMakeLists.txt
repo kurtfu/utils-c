@@ -23,11 +23,17 @@ endif()
 
 include_directories(
     cbuf
+    dll
 )
 
 add_executable(utils-test
+    test/main.cpp
+
     cbuf/cbuf.c
     test/cbuf.cpp
+
+    test/dll.c
+    test/dll.cpp
 )
 
 target_link_libraries(utils-test doctest::doctest)
