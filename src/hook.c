@@ -135,7 +135,7 @@ int hook_notify(struct subject* subj)
 
 static int hook_instance_check(struct subject* subj)
 {
-    int result;
+    int result = HOOK_OK;
 
     if (NULL == subj)
     {
@@ -144,10 +144,6 @@ static int hook_instance_check(struct subject* subj)
     else if (NULL == subj->alloc || NULL == subj->free)
     {
         result = HOOK_INVALID_CONFIG;
-    }
-    else
-    {
-        result = HOOK_OK;
     }
 
     return result;
